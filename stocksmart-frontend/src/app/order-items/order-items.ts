@@ -1,0 +1,6 @@
+import { Component,OnInit,ChangeDetectorRef } from '@angular/core'; import { CommonModule } from '@angular/common'; import { FormsModule } from '@angular/forms'; import { HttpClient } from '@angular/common/http'; import { API } from '../api';
+@Component({selector:'app-order-items',standalone:true,imports:[CommonModule,FormsModule],templateUrl:'./order-items.html'})
+export class OrderItems implements OnInit { items:any[]=[];orders:any[]=[];products:any[]=[];message=''; item:any={order:{id:null},product:{id:null},quantity:1,price:0};
+constructor(private http:HttpClient,private cdr:ChangeDetectorRef){} ngOnInit(){this.load();this.http.get<any[]>(`${API}/orders`).subscribe(d=>this.orders=d);this.http.get<any[]>(`${API}/products`).subscribe(d=>this.products=d);}
+load(){this.http.get<any[]>(`${API}/order-items`).subscribe(d=>{this.items=d;this.cdr.detectChanges()});}
+add(){this.http.post(`${API}/order-items`,this.item).subscribe({next:()=>{this.message='Item added — inventory updated automatically';this.item={order:{id:null},product:{id:null},quantity:1,price:0};this.load();},error:e=>{this.message=e?.error?.message||e?.error||'Unable to add item. Check stock and selected order/store.';this.cdr.detectChanges();}});}}

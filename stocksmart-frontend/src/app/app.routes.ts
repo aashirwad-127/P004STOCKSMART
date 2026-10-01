@@ -1,0 +1,11 @@
+import { Dashboard } from './dashboard/dashboard';
+import { Products } from './products/products';
+import { Suppliers } from './suppliers/suppliers';
+import { Categories } from './categories/categories';
+import { Customers } from './customers/customers';
+import { Stores } from './stores/stores';
+import { Inventory } from './inventory/inventory';
+import { Orders } from './orders/orders';
+import { OrderItems } from './order-items/order-items';
+import { Routes } from '@angular/router';
+export const routes: Routes = [{path:'',component:Dashboard},{path:'products',component:Products},{path:'suppliers',component:Suppliers},{path:'categories',component:Categories},{path:'customers',component:Customers},{path:'stores',component:Stores},{path:'inventory',component:Inventory},{path:'orders',component:Orders},{path:'order-items',component:OrderItems},{path:'**',redirectTo:''}];
