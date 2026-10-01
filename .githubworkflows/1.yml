@@ -1,0 +1,57 @@
+name: StockSmart CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  backend:
+    name: Spring Boot Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Make Maven wrapper executable
+        working-directory: stocksmart
+        run: chmod +x mvnw
+
+      - name: Run backend tests
+        working-directory: stocksmart
+        run: ./mvnw clean test
+
+  frontend:
+    name: Angular Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: stocksmart-frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: stocksmart-frontend
+        run: npm ci
+
+      - name: Build Angular application
+        working-directory: stocksmart-frontend
+        run: npm run build
